@@ -36,9 +36,4 @@ export default class Gunner extends Hoverer {
 		this.bullet.body.velocity.x = 350*Math.cos(this.gun.rotation);
 		this.bullet.body.velocity.y = 350*Math.sin(this.gun.rotation);
 	}
-
-	destroy() {
-		game.time.events.remove(this.fireLoop);
-		super.destroy();
-	}
 }

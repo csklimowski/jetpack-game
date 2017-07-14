@@ -109,6 +109,9 @@ export default class MainState extends Phaser.State {
 	playerHits(player, body) {
 		if (body.parent.inverted) {
 			if (player.lvy < -300) {
+				if (body.parent.enemyType == 3) {
+					game.time.events.remove(body.parent.fireLoop);
+				}
 				player.body.velocity.y = 0;
 				body.parent.eye.frame = 1;
 				body.parent.dead = true;
@@ -121,6 +124,9 @@ export default class MainState extends Phaser.State {
 			}
 		} else {
 			if (player.lvy > 300) {
+				if (body.parent.enemyType == 3) {
+					game.time.events.remove(body.parent.fireLoop);
+				}
 				player.body.velocity.y *= -0.4;
 				body.parent.eye.frame = 1;
 				body.parent.dead = true;
