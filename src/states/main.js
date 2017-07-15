@@ -53,6 +53,7 @@ export default class MainState extends Phaser.State {
 
 		this.awaitingNewWave = true;
 	}
+
 	update() {
 		game.camera.y = this.player.body.y - 200;
 
@@ -82,6 +83,7 @@ export default class MainState extends Phaser.State {
 		game.camera.y = game.camera.y + Math.max(0, 20 - this.shakeProgress) * Math.sin(this.shakeProgress);
 		this.shakeProgress += 1.25;
 	}
+
 	updateEnemy(enemy) {
 		enemy.eye.rotation = game.physics.arcade.angleBetween(enemy, this.player);
 		if (!this.player.dead) {
@@ -99,6 +101,7 @@ export default class MainState extends Phaser.State {
 			}
 		}
 	}
+
 	playerHits(player, body) {
 		if (body.parent.inverted) {
 			if (player.lvy < -300) {
@@ -132,6 +135,7 @@ export default class MainState extends Phaser.State {
 			}
 		}
 	}
+
 	takeDamage() {
 		this.player.health--;
 		this.lifebar.frame++;
@@ -149,6 +153,7 @@ export default class MainState extends Phaser.State {
 			game.time.events.add(500, this.player.vincible, this.player);
 		}
 	}
+
 	robotExplodes(robody) {
 		if (robody.parent) {
 			this.exploder.explodeEnemy(robody.parent.x, robody.parent.y, robody.parent.inverted);
@@ -159,6 +164,7 @@ export default class MainState extends Phaser.State {
 			this.shakeProgress = 0;
 		}
 	}
+	
 	newWave() {
 		var pointsLeft = this.level;
 		var heights = [350, 450, 550, 650, 750];
@@ -167,7 +173,6 @@ export default class MainState extends Phaser.State {
 		while (pointsLeft > 0) {
 			var x = positions.splice(Math.floor(Math.random() * positions.length), 1)[0];
 			var y = heights.splice(Math.floor(Math.random() * heights.length), 1)[0];
-			console.log(y);
 			var enemyChoice = Math.floor(Math.random() * Math.min(pointsLeft, 6)) + 2;
 			var newEnemy;
 	

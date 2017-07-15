@@ -9,7 +9,6 @@ export default class LoadState extends Phaser.State {
 		game.load.spritesheet('gun', 'img/gun.png', 35, 20);
 		game.load.spritesheet('blade', 'img/blade.png', 34, 87);
 		game.load.spritesheet('eye', 'img/eye.png', 20, 20);
-		game.load.spritesheet('spark', 'img/spark.png', 35, 35);
 		game.load.spritesheet('shards', 'img/shards.png', 24, 24);
 		game.load.spritesheet('bullet', 'img/bullet.png', 15, 10);
 		game.load.spritesheet('arrows', 'img/arrows.png', 76, 76);
@@ -19,6 +18,7 @@ export default class LoadState extends Phaser.State {
 		game.load.image('fire', 'img/fire.png');
 		game.load.image('display', 'img/display.png');
 	}
+	
 	create() {
 		console.log(' _ _ _ _ _ \n|  _|  _| |\n| |_  |   |\n|_ _|_|_ _|');
 		game.state.start('menu');

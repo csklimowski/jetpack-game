@@ -22,6 +22,7 @@ export default class ButtonText extends Phaser.Text {
 			backgroundColor: '#00ff00'
 		});
 	}
+	
 	onOut() {
 		this.setStyle({
 			font: '15px monospace',
