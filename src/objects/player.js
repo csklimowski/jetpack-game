@@ -1,5 +1,6 @@
 import game from '../jetpack';
 import Exploder from './exploder';
+import Triangle from './triangle';
 
 export default class Player extends Phaser.Sprite {
 	constructor(x, y) {
@@ -23,6 +24,8 @@ export default class Player extends Phaser.Sprite {
 		this.jet.setAlpha(1, 0, 2000);
 		this.jet.start(false, 500, 15);
 		this.jet.on = false;
+
+		this.triangle = new Triangle(this, true);
 
 		game.physics.arcade.enable(this);
 
@@ -85,7 +88,7 @@ export default class Player extends Phaser.Sprite {
 	}
 
 	jetpackOn() {
-		if (!game.paused) {
+		if (!game.paused && !this.dead) {
 			this.jet.on = true;
 			this.weight = 250;
 		}

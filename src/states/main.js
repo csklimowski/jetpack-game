@@ -4,7 +4,6 @@ import Gunner from '../objects/gunner';
 import Hoverer from '../objects/hoverer';
 import Player from '../objects/player';
 import Slicer from '../objects/slicer';
-import Triangle from '../objects/triangle';
 
 export default class MainState extends Phaser.State {
 	create() {
@@ -144,6 +143,7 @@ export default class MainState extends Phaser.State {
 			this.shakeProgress = 0;
 			this.player.frame = 3;
 			this.player.dead = true;
+			this.player.triangle.destroy();
 			game.time.events.add(3000, game.state.start, game.state, 'results');
 		} else {
 			this.player.invincible = true;
@@ -159,12 +159,18 @@ export default class MainState extends Phaser.State {
 			this.exploder.explodeEnemy(robody.parent.x, robody.parent.y, robody.parent.inverted);
 			this.player.body.velocity.y += 800*Math.sin(game.physics.arcade.angleBetween(robody.parent, this.player));
 			this.player.body.velocity.x += 1200*Math.cos(game.physics.arcade.angleBetween(robody.parent, this.player));
-			robody.parent.destroy();
-			game.score += 10;
+			if (robody.parent.enemyType == 1) {
+				game.score += 10;
+			} else if (robody.parent.enemyType == 2) {
+				game.score += 20;
+			} else if (robody.parent.enemyType == 3) {
+				game.score += 40;
+			}
 			this.shakeProgress = 0;
+			robody.parent.destroy();
 		}
 	}
-	
+
 	newWave() {
 		var pointsLeft = this.level;
 		var heights = [350, 450, 550, 650, 750];
@@ -191,7 +197,6 @@ export default class MainState extends Phaser.State {
 			}
 
 			this.enemies.add(newEnemy);
-			new Triangle(newEnemy);
 			pointsLeft -= enemyChoice;
 			if (heights.length <= 0) break;
 		}

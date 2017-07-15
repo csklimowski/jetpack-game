@@ -1,4 +1,5 @@
 import game from '../jetpack';
+import Triangle from './triangle';
 
 export default class Hoverer extends Phaser.Group {
 	constructor(x, y, inverted, moving) {
@@ -15,6 +16,8 @@ export default class Hoverer extends Phaser.Group {
 			game.add.tween(this).to({x: x}, 10*Math.abs(this.x-x)).start();
 		}
 
+		this.triangle = new Triangle(this, false);
+
 		this.eye = game.add.sprite(0, 0, 'eye');
 		this.eye.anchor.set(0.5);
 
@@ -28,7 +31,6 @@ export default class Hoverer extends Phaser.Group {
 			this.robody.animations.add('hover', [0, 1, 2, 3], 30, true);
 			this.robody.anchor.set(0.5, 0.4);
 		}
-
 		this.robody.animations.play('hover');
 		
 		game.physics.arcade.enable(this.robody);
@@ -50,11 +52,16 @@ export default class Hoverer extends Phaser.Group {
 			this.x += this.vx;
 		}
 		if (this.dead) {
-			if (this.inverted) this.y -= 3;
-			else               this.y += 3;
+			if (this.inverted) this.y -= 2;
+			else               this.y += 2;
 			this.angle += 2;
 		} else {
 			this.y += 1.5*Math.sin(game.time.now);
 		}
+	}
+
+	destroy() {
+		this.triangle.destroy();
+		super.destroy();
 	}
 }
