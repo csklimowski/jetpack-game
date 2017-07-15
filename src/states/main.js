@@ -26,6 +26,7 @@ export default class MainState extends Phaser.State {
 			font: "15px monospace",
 			fill: "white"
 		});
+		this.lifebar = game.add.sprite(280, 5, 'lifebar');
 
 		this.display = game.add.sprite(0, 540, 'display');
 		game.add.tween(this.display).to({x: 315}, 500).start();
@@ -61,6 +62,8 @@ export default class MainState extends Phaser.State {
 		this.scoreDisplay.y = game.camera.y + 5;
 		this.scoreDisplay.text = Math.floor(this.visibleScore);
 
+		this.lifebar.y = game.camera.y + 5;
+
 		if (this.enemies.length == 0 && !this.awaitingNewWave) {
 			game.time.events.add(2000, this.newWave, this);
 			this.awaitingNewWave = true;
@@ -86,13 +89,13 @@ export default class MainState extends Phaser.State {
 		}
 		if (enemy.enemyType == 2) {
 			if (!this.player.invincible && !this.player.dead) {
-				game.physics.arcade.overlap(this.player, enemy.blade, this.player.hitProjectile, null, this.player);
+				game.physics.arcade.overlap(this.player, enemy.blade, this.takeDamage, null, this);
 			}
 		}
 		if (enemy.enemyType == 3) {
 			enemy.gun.rotation = game.physics.arcade.angleBetween(enemy, this.player);
 			if (!this.player.invincible && !this.player.dead) {
-				game.physics.arcade.overlap(this.player, enemy.bullet, this.player.hitProjectile, null, this.player);
+				game.physics.arcade.overlap(this.player, enemy.bullet, this.takeDamage, null, this);
 			}
 		}
 	}
@@ -108,7 +111,7 @@ export default class MainState extends Phaser.State {
 				game.time.events.add(500, this.robotExplodes, this, body);
 			} else {
 				if (!player.invincible && player.y < body.parent.y) {
-					player.takeDamage();
+					this.takeDamage();
 				}
 				game.physics.arcade.collide(player, body);
 			}
@@ -123,10 +126,27 @@ export default class MainState extends Phaser.State {
 				game.time.events.add(500, this.robotExplodes, this, body);
 			} else {
 				if (player.lvy < 50 && !player.invincible && player.y > body.parent.y) {
-					player.takeDamage();
+					this.takeDamage();
 				}
 				game.physics.arcade.collide(player, body);
 			}
+		}
+	}
+	takeDamage() {
+		this.player.health--;
+		this.lifebar.frame++;
+		if (this.player.health <= 0) {
+			this.exploder.explodePlayer(this.player.x, this.player.y);
+			this.shakeProgress = 0;
+			this.player.frame = 3;
+			this.player.dead = true;
+			game.time.events.add(3000, game.state.start, game.state, 'results');
+		} else {
+			this.player.invincible = true;
+			this.player.body.velocity.x = 0;
+			this.player.body.velocity.y = 0;
+			this.player.alpha = 0.5;
+			game.time.events.add(500, this.player.vincible, this.player);
 		}
 	}
 	robotExplodes(robody) {

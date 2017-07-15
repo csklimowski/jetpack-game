@@ -84,27 +84,6 @@ export default class Player extends Phaser.Sprite {
 		this.alpha = 1;
 	}
 
-	hitProjectile() {
-		this.body.velocity.x = 0;
-		this.body.velocity.y = 0;
-		this.takeDamage.call(this);
-	}
-
-	takeDamage() {
-		this.health--;
-		if (this.health <= 0) {
-			this.frame = 3;
-			this.dead = true;
-			game.time.events.add(2000, game.state.start, game.state, 'results');
-		} else {
-			this.invincible = true;
-			this.body.velocity.x = 0;
-			this.body.velocity.y = 0;
-			this.alpha = 0.5;
-			game.time.events.add(500, this.vincible, this);
-		}
-	}
-
 	jetpackOn() {
 		if (!game.paused) {
 			this.jet.on = true;

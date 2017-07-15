@@ -13,6 +13,7 @@ export default class LoadState extends Phaser.State {
 		game.load.spritesheet('shards', 'img/shards.png', 24, 24);
 		game.load.spritesheet('bullet', 'img/bullet.png', 15, 10);
 		game.load.spritesheet('arrows', 'img/arrows.png', 76, 76);
+		game.load.spritesheet('lifebar', 'img/lifebar.png', 30, 18);
 		game.load.image('smoke', 'img/smoke.png');
 		game.load.image('triangle', 'img/triangle.png');
 		game.load.image('fire', 'img/fire.png');
