@@ -17,7 +17,6 @@ export default class MainState extends Phaser.State {
 		
 		this.player = new Player(150, 700);
 		this.enemies = game.add.group();
-		this.sparks = game.add.group();
 		this.shakeProgress = 20;
 
 		game.score = 0;
@@ -69,7 +68,6 @@ export default class MainState extends Phaser.State {
 
 		this.graphics.clear();
 		this.enemies.forEach(this.updateEnemy, this);
-		this.sparks.forEach(this.updateSpark, this);
 
 		this.graphics.lineStyle(2, 0x000000, 1);
 		this.graphics.moveTo(0, 900);
@@ -97,14 +95,6 @@ export default class MainState extends Phaser.State {
 				game.physics.arcade.overlap(this.player, enemy.bullet, this.player.hitProjectile, null, this.player);
 			}
 		}
-	}
-	updateSpark(spark) {
-		this.graphics.lineStyle(1, 0xFFFFFF, 1);
-		this.graphics.moveTo(spark.path[0], spark.path[1]);
-		for (var i = 2; i < spark.path.length; i += 2) {
-			this.graphics.lineTo(spark.path[i], spark.path[i+1]);
-		}
-		game.physics.arcade.collide(this.player, spark, this.player.hitProjectile, null, this.player);
 	}
 	playerHits(player, body) {
 		if (body.parent.inverted) {
