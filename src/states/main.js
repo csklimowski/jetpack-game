@@ -31,6 +31,7 @@ export default class MainState extends Phaser.State {
 		game.add.tween(this.display).to({x: 315}, 500).start();
 
 		game.time.events.add(1000, function() {
+			game.sfx.floodlights.play();
 			this.background.frame = 1;
 			this.tutorialArrows = {
 				left: game.add.sprite(25, 480, 'arrows', 0),
@@ -58,6 +59,8 @@ export default class MainState extends Phaser.State {
 
 		if (this.visibleScore < game.score) {
 			this.visibleScore = Math.min(this.visibleScore + 0.3, game.score);
+		} else {
+			game.sfx.beep.stop();
 		}
 		this.scoreDisplay.y = game.camera.y + 5;
 		this.scoreDisplay.text = Math.floor(this.visibleScore);
@@ -65,6 +68,7 @@ export default class MainState extends Phaser.State {
 		this.lifebar.y = game.camera.y + 5;
 
 		if (this.enemies.length == 0 && !this.awaitingNewWave) {
+			game.sfx.helicopter.stop();
 			game.time.events.add(2000, this.newWave, this);
 			this.awaitingNewWave = true;
 		}
@@ -107,12 +111,14 @@ export default class MainState extends Phaser.State {
 				if (body.parent.enemyType == 3) {
 					game.time.events.remove(body.parent.fireLoop);
 				}
+				game.sfx.hit.play();
+				game.sfx.robot[Math.floor(Math.random()*3)].play();
 				player.body.velocity.y = 0;
 				body.parent.eye.frame = 1;
 				body.parent.dead = true;
 				game.time.events.add(500, this.robotExplodes, this, body);
 			} else {
-				if (!player.invincible && player.y < body.parent.y) {
+				if (player.lvy > 0 && player.y < body.parent.y) {
 					this.takeDamage();
 				}
 				game.physics.arcade.collide(player, body);
@@ -122,12 +128,14 @@ export default class MainState extends Phaser.State {
 				if (body.parent.enemyType == 3) {
 					game.time.events.remove(body.parent.fireLoop);
 				}
+				game.sfx.hit.play();
+				game.sfx.robot[Math.floor(Math.random()*3)].play();
 				player.body.velocity.y *= -0.4;
 				body.parent.eye.frame = 1;
 				body.parent.dead = true;
 				game.time.events.add(500, this.robotExplodes, this, body);
 			} else {
-				if (player.lvy < 50 && !player.invincible && player.y > body.parent.y) {
+				if (player.lvy < 50 && player.y > body.parent.y) {
 					this.takeDamage();
 				}
 				game.physics.arcade.collide(player, body);
@@ -136,26 +144,31 @@ export default class MainState extends Phaser.State {
 	}
 
 	takeDamage() {
-		this.player.health--;
-		this.lifebar.frame++;
-		if (this.player.health <= 0) {
-			this.exploder.explodePlayer(this.player.x, this.player.y);
-			this.shakeProgress = 0;
-			this.player.frame = 3;
-			this.player.dead = true;
-			this.player.triangle.destroy();
-			game.time.events.add(3000, game.state.start, game.state, 'results');
-		} else {
-			this.player.invincible = true;
-			this.player.body.velocity.x = 0;
-			this.player.body.velocity.y = 0;
-			this.player.alpha = 0.5;
-			game.time.events.add(500, this.player.vincible, this.player);
+		if (!this.player.invincible) {
+			this.player.health--;
+			this.lifebar.frame++;
+			if (this.player.health <= 0) {
+				game.sfx.explosion.play();
+				this.exploder.explodePlayer(this.player.x, this.player.y);
+				this.shakeProgress = 0;
+				this.player.frame = 3;
+				this.player.dead = true;
+				this.player.triangle.destroy();
+				game.time.events.add(3000, game.state.start, game.state, 'results');
+			} else {
+				game.sfx.hurt.play();
+				this.player.invincible = true;
+				this.player.body.velocity.x = 0;
+				this.player.body.velocity.y = 0;
+				this.player.alpha = 0.5;
+				game.time.events.add(500, this.player.vincible, this.player);
+			}
 		}
 	}
 
 	robotExplodes(robody) {
 		if (robody.parent) {
+			game.sfx.explosion.play();
 			this.exploder.explodeEnemy(robody.parent.x, robody.parent.y, robody.parent.inverted);
 			this.player.body.velocity.y += 800*Math.sin(game.physics.arcade.angleBetween(robody.parent, this.player));
 			this.player.body.velocity.x += 1200*Math.cos(game.physics.arcade.angleBetween(robody.parent, this.player));
@@ -166,6 +179,7 @@ export default class MainState extends Phaser.State {
 			} else if (robody.parent.enemyType == 3) {
 				game.score += 40;
 			}
+			game.sfx.beep.play();
 			this.shakeProgress = 0;
 			robody.parent.destroy();
 		}
@@ -200,6 +214,7 @@ export default class MainState extends Phaser.State {
 			pointsLeft -= enemyChoice;
 			if (heights.length <= 0) break;
 		}
+		game.sfx.helicopter.play();
 		this.awaitingNewWave = false;
 		this.level++;
 	}

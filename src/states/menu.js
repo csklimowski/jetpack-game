@@ -25,16 +25,18 @@ export default class MenuState extends Phaser.State {
 		topText.anchor.set(0.5, 0);
 
 		game.time.events.repeat(40, topText.fullText.length, this.updateText, this, topText);
+		game.sfx.beep.play();
 	}
 
 	updateText(text) {
 		text.text = text.text.substring(0, text.text.length - 1) + text.fullText.charAt(text.progress) + String.fromCharCode(9608);
 		text.progress++;
 		if (text.progress == text.fullText.length) {
+			game.sfx.beep.stop();
 			text.text = text.finalText;
 			game.add.existing(new ButtonText(158, 282, 'BEGIN', this.startGame, this));
 			game.add.existing(new ButtonText(158, 304, 'CREDITS', this.viewCredits, this));
-			game.add.existing(new ButtonText(158, 326, 'SOUND: ON', this.toggleSound, this));
+			this.soundButton = game.add.existing(new ButtonText(158, 326, 'SOUND: ON', this.toggleSound, this));
 		}
 	}
 
@@ -47,6 +49,8 @@ export default class MenuState extends Phaser.State {
 	}
 	
 	toggleSound() {
-		console.log('sound!');
+		game.sound.mute = !game.sound.mute;
+		game.sfx.gun.play();
+		this.soundButton.text = 'SOUND: ' + (game.sound.mute ? 'OFF' : 'ON');
 	}
 }

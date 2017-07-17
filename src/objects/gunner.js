@@ -29,6 +29,7 @@ export default class Gunner extends Hoverer {
 	}
 
 	fire() {
+		game.sfx.gun.play();
 		this.gun.animations.play('fire');
 		this.bullet.x = this.x + Math.cos(this.gun.rotation)*30;
 		this.bullet.y = this.y + Math.sin(this.gun.rotation)*30;

@@ -89,12 +89,14 @@ export default class Player extends Phaser.Sprite {
 
 	jetpackOn() {
 		if (!game.paused && !this.dead) {
+			game.sfx.jetpack.play();
 			this.jet.on = true;
 			this.weight = 250;
 		}
 	}
 
 	jetpackOff() {
+		game.sfx.jetpack.stop();
 		this.jet.on = false;
 		this.weight = 100;
 	}
