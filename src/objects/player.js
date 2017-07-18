@@ -1,5 +1,4 @@
 import game from '../jetpack';
-import Exploder from './exploder';
 import Triangle from './triangle';
 
 export default class Player extends Phaser.Sprite {

@@ -4,6 +4,7 @@ import Gunner from '../objects/gunner';
 import Hoverer from '../objects/hoverer';
 import Player from '../objects/player';
 import Slicer from '../objects/slicer';
+import ComboText from '../objects/combotext';
 
 export default class MainState extends Phaser.State {
 	create() {
@@ -18,8 +19,12 @@ export default class MainState extends Phaser.State {
 		this.enemies = game.add.group();
 		this.shakeProgress = 20;
 
+		this.multiplier = 0;
+		this.comboText = new ComboText();
+		this.lastWasInverted = false;
+		this.noBotsHit = true;
+
 		game.score = 0;
-		this.level = 1;
 		this.visibleScore = 0;
 		this.scoreDisplay = game.add.text(5, 0, '00000', {
 			font: "15px monospace",
@@ -51,6 +56,7 @@ export default class MainState extends Phaser.State {
 			}, this);
 		}, this);
 
+		this.level = 10;
 		this.awaitingNewWave = true;
 	}
 
@@ -64,7 +70,6 @@ export default class MainState extends Phaser.State {
 		}
 		this.scoreDisplay.y = game.camera.y + 5;
 		this.scoreDisplay.text = Math.floor(this.visibleScore);
-
 		this.lifebar.y = game.camera.y + 5;
 
 		if (this.enemies.length == 0 && !this.awaitingNewWave) {
@@ -80,6 +85,12 @@ export default class MainState extends Phaser.State {
 		this.graphics.moveTo(0, 900);
 		if (this.player.body.y >= 860 && !this.player.dead) {
 			this.graphics.lineTo(this.player.body.x + 20, this.player.body.y + 40);
+		} else if (this.player.ly >= 860) {
+			if (this.noBotsHit) {
+				this.multiplier = 0;
+			} else {
+				this.noBotsHit = true;
+			}
 		}
 		this.graphics.lineTo(315, 900);
 
@@ -161,7 +172,7 @@ export default class MainState extends Phaser.State {
 				this.player.body.velocity.x = 0;
 				this.player.body.velocity.y = 0;
 				this.player.alpha = 0.5;
-				game.time.events.add(500, this.player.vincible, this.player);
+				game.time.events.add(1000, this.player.vincible, this.player);
 			}
 		}
 	}
@@ -169,18 +180,30 @@ export default class MainState extends Phaser.State {
 	robotExplodes(robody) {
 		if (robody.parent) {
 			game.sfx.explosion.play();
+			game.sfx.beep.play();
+			this.shakeProgress = 0;
 			this.exploder.explodeEnemy(robody.parent.x, robody.parent.y, robody.parent.inverted);
 			this.player.body.velocity.y += 800*Math.sin(game.physics.arcade.angleBetween(robody.parent, this.player));
 			this.player.body.velocity.x += 1200*Math.cos(game.physics.arcade.angleBetween(robody.parent, this.player));
-			if (robody.parent.enemyType == 1) {
-				game.score += 10;
-			} else if (robody.parent.enemyType == 2) {
-				game.score += 20;
-			} else if (robody.parent.enemyType == 3) {
-				game.score += 40;
+
+			if (!this.noBotsHit || (robody.parent.inverted || this.lastWasInverted)) {
+				this.multiplier++;
+			} else {
+				this.multiplier = 1;
 			}
-			game.sfx.beep.play();
-			this.shakeProgress = 0;
+			if (this.multiplier >= 2) {
+				this.comboText.appear(robody.parent.x, robody.parent.y, this.multiplier);
+			}
+			this.noBotsHit = false;
+			this.lastWasInverted = robody.parent.inverted;
+
+			if (robody.parent.enemyType == 1) {
+				game.score += 10 * this.multiplier;
+			} else if (robody.parent.enemyType == 2) {
+				game.score += 20 * this.multiplier;
+			} else if (robody.parent.enemyType == 3) {
+				game.score += 40 * this.multiplier;
+			}
 			robody.parent.destroy();
 		}
 	}

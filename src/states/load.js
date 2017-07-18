@@ -2,7 +2,7 @@ import game from '../jetpack';
 
 export default class LoadState extends Phaser.State {
 	preload() {
-		var loadingText = game.add.text(158, 150, 'Loading...', { font: '15px monospace', fill: '#00ff00', align: 'center'});
+		game.add.text(158, 150, 'Loading...', { font: '15px monospace', fill: '#00ff00', align: 'center'}).anchor.set(0.5);
 		game.load.spritesheet('player', 'img/player.png', 32, 43);
 		game.load.spritesheet('background', 'img/bg.png', 315, 1000);
 		game.load.spritesheet('hoverer', 'img/hoverer.png', 48, 60);
@@ -14,6 +14,7 @@ export default class LoadState extends Phaser.State {
 		game.load.spritesheet('arrows', 'img/arrows.png', 76, 76);
 		game.load.spritesheet('lifebar', 'img/lifebar.png', 30, 18);
 		game.load.spritesheet('triangle', 'img/triangle.png', 20, 20);
+		game.load.spritesheet('combo', 'img/combo.png', 30, 20);
 		game.load.image('smoke', 'img/smoke.png');
 		game.load.image('fire', 'img/fire.png');
 		game.load.image('display', 'img/display.png');
@@ -29,6 +30,10 @@ export default class LoadState extends Phaser.State {
 		game.load.audio('robot-1', 'sfx/robot-1.ogg');
 		game.load.audio('robot-2', 'sfx/robot-2.ogg');
 		game.load.audio('robot-3', 'sfx/robot-3.ogg');
+		game.load.audio('combo-1', 'sfx/combo-1.ogg');
+		game.load.audio('combo-2', 'sfx/combo-2.ogg');
+		game.load.audio('combo-3', 'sfx/combo-3.ogg');
+		game.load.audio('combo-4', 'sfx/combo-4.ogg');
 	}
 
 	create() {
@@ -46,6 +51,12 @@ export default class LoadState extends Phaser.State {
 				game.add.audio('robot-1', 0.5, false),
 				game.add.audio('robot-2', 0.5, false),
 				game.add.audio('robot-3', 0.5, false)
+			],
+			combo: [
+				game.add.audio('combo-1', 1, false),
+				game.add.audio('combo-2', 1, false),
+				game.add.audio('combo-3', 1, false),
+				game.add.audio('combo-4', 1, false)
 			]
 		}
 		console.log(' _ _ _ _ _ \n|  _|  _| |\n| |_  |   |\n|_ _|_|_ _|');
