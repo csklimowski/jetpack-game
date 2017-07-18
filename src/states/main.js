@@ -56,7 +56,7 @@ export default class MainState extends Phaser.State {
 			}, this);
 		}, this);
 
-		this.level = 10;
+		this.level = 1;
 		this.awaitingNewWave = true;
 	}
 
@@ -118,7 +118,7 @@ export default class MainState extends Phaser.State {
 
 	playerHits(player, body) {
 		if (body.parent.inverted) {
-			if (player.lvy < -300) {
+			if (player.lvy < -300 && !body.parent.dead) {
 				if (body.parent.enemyType == 3) {
 					game.time.events.remove(body.parent.fireLoop);
 				}
@@ -129,13 +129,13 @@ export default class MainState extends Phaser.State {
 				body.parent.dead = true;
 				game.time.events.add(500, this.robotExplodes, this, body);
 			} else {
-				if (player.lvy > 0 && player.y < body.parent.y) {
+				if (player.lvy > 0 && player.y < body.parent.y - 30) {
 					this.takeDamage();
 				}
 				game.physics.arcade.collide(player, body);
 			}
 		} else {
-			if (player.lvy > 300) {
+			if (player.lvy > 300 && !body.parent.dead) {
 				if (body.parent.enemyType == 3) {
 					game.time.events.remove(body.parent.fireLoop);
 				}
@@ -146,7 +146,7 @@ export default class MainState extends Phaser.State {
 				body.parent.dead = true;
 				game.time.events.add(500, this.robotExplodes, this, body);
 			} else {
-				if (player.lvy < 50 && player.y > body.parent.y) {
+				if (player.lvy < 50 && player.y > body.parent.y + 30) {
 					this.takeDamage();
 				}
 				game.physics.arcade.collide(player, body);
@@ -160,6 +160,7 @@ export default class MainState extends Phaser.State {
 			this.lifebar.frame++;
 			if (this.player.health <= 0) {
 				game.sfx.explosion.play();
+				this.player.jetpackOff();
 				this.exploder.explodePlayer(this.player.x, this.player.y);
 				this.shakeProgress = 0;
 				this.player.frame = 3;

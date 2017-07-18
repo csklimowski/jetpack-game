@@ -35,6 +35,9 @@ export default class Hoverer extends Phaser.Group {
 		
 		game.physics.arcade.enable(this.robody);
 		this.robody.body.immovable = true;
+		this.robody.body.offset.set(8);
+		this.robody.body.width = 32;
+		this.robody.body.height = 44;
 
 		this.add(this.eye);
 		this.add(this.robody);
