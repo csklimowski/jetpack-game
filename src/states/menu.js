@@ -9,7 +9,6 @@ export default class MenuState extends Phaser.State {
 		var desc1 = ['PERSONAL ', 'COMPACT ', 'BACK-MOUNTED ', 'PORTABLE ', 'SMALL-SCALE ', 'MINIATURE '];
 		var desc2 = ['FLYING ', 'LEVITATION ', 'HOVERING ', 'UN-FALLING ', 'AVIATION ', 'ASCENSION '];
 		var desc3 = ['APPARATUS', 'MACHINE', 'DEVICE', 'APPLIANCE', 'UTENSIL', 'CONTRAPTION'];
-
 		var description;
 		do {
 			description = 
@@ -17,9 +16,11 @@ export default class MenuState extends Phaser.State {
 				desc2[Math.floor(Math.random() * desc2.length)] +
 				desc3[Math.floor(Math.random() * desc3.length)];
 		} while (description.length > 31);
+
+		var testNumber = Math.floor(Math.random() * 10000);
 		
 		var topText = game.add.text(158, 150, String.fromCharCode(9608), { font: '15px monospace', fill: '#00ff00', align: 'center'});
-		topText.finalText = 'CFD INTERNAL PROTOTYPE\n"JETTISON PACK"\n' + description + '\nTEST #001';
+		topText.finalText = 'CFD INTERNAL PROTOTYPE\n"JETTISON PACK"\n' + description + '\nTEST #' + testNumber;
 		topText.fullText = topText.finalText + '\n\n\nBEGIN\nCREDITS\nSOUND: ON';
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);

@@ -23,7 +23,7 @@ export default class ResultsState extends Phaser.State {
 		if (text.progress == text.fullText.length) {
 			game.sfx.beep.stop();
 			text.text = text.finalText;
-			game.add.existing(new ButtonText(158, 768, 'RETURN', this.return, this));
+			game.add.existing(new ButtonText(158, 767, 'RETURN', this.return, this));
 		}
 	}
 
