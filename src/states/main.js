@@ -34,6 +34,9 @@ export default class MainState extends Phaser.State {
 
 		this.display = game.add.sprite(0, 540, 'display');
 		game.add.tween(this.display).to({x: 315}, 500).start();
+		game.input.keyboard.addKey(Phaser.KeyCode.ESC).onDown.add(function() {
+			game.paused = !game.paused
+		}, this);
 
 		game.time.events.add(1000, function() {
 			game.sfx.floodlights.play();
