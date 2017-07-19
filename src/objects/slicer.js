@@ -29,6 +29,5 @@ export default class Slicer extends Hoverer {
         this.blade.angle += 1;
         this.blade.body.offset.x = Math.sin(this.blade.rotation)*70 + 5;
         this.blade.body.offset.y = -Math.cos(this.blade.rotation)*70 + 80;
-        game.debug.body(this.blade);
     }
 }

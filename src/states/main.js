@@ -104,7 +104,7 @@ export default class MainState extends Phaser.State {
 			game.physics.arcade.overlap(this.player, enemy.robody, this.playerHits, null, this);
 		}
 		if (enemy.enemyType == 2) {
-			if (!this.player.invincible && !this.player.dead) {
+			if (!this.player.invincible && !this.player.dead && !enemy.dead) {
 				game.physics.arcade.overlap(this.player, enemy.blade, this.takeDamage, null, this);
 			}
 		}
