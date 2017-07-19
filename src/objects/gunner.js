@@ -25,7 +25,9 @@ export default class Gunner extends Hoverer {
 
 		this.enemyType = 3;
 
-		this.fireLoop = game.time.events.loop(2000, this.fire, this);
+		game.time.events.add(Math.random()*1000, function() {
+			this.fireLoop = game.time.events.loop(2000, this.fire, this);
+		}, this);
 	}
 
 	fire() {
