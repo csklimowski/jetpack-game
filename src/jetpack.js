@@ -4,7 +4,7 @@ import MainState from './states/main';
 import ResultsState from './states/results';
 import CreditsState from './states/credits';
 
-var game = new Phaser.Game(315, 560, Phaser.AUTO, '');
+var game = new Phaser.Game(315, 560, Phaser.AUTO, 'game');
 
 game.state.add('load', LoadState);
 game.state.add('main', MainState);

@@ -38,7 +38,7 @@ export default class LoadState extends Phaser.State {
 
 	create() {
 		game.sfx = {
-			music: game.add.audio('music', 1, true),
+			music: game.add.audio('music', 0.7, true),
 			jetpack: game.add.audio('jetpack', 0.5, true),
 			floodlights: game.add.audio('floodlights', 1, false),
 			helicopter: game.add.audio('helicopter', 1.5, true),
@@ -60,6 +60,8 @@ export default class LoadState extends Phaser.State {
 			]
 		}
 		console.log(' _ _ _ _ _ \n|  _|  _| |\n| |_  |   |\n|_ _|_|_ _|');
+		game.soundSetting = 0;
+		game.sfx.music.play();
 		game.state.start('menu');
 	}
 }

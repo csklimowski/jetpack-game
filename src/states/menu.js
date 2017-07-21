@@ -18,10 +18,11 @@ export default class MenuState extends Phaser.State {
 		} while (description.length > 31);
 
 		var testNumber = Math.floor(Math.random() * 10000);
+		this.soundOptions = ['ON', 'OFF', 'SFX ONLY']
 		
 		var topText = game.add.text(158, 150, String.fromCharCode(9608), { font: '15px monospace', fill: '#00ff00', align: 'center'});
 		topText.finalText = 'CFD INTERNAL PROTOTYPE\n"JETTISON PACK"\n' + description + '\nTEST #' + testNumber;
-		topText.fullText = topText.finalText + '\n\n\nBEGIN\nCREDITS\nSOUND: ON';
+		topText.fullText = topText.finalText + '\n\n\nBEGIN\nCREDITS\nSOUND: ' + this.soundOptions[game.soundSetting];
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);
 
@@ -37,7 +38,7 @@ export default class MenuState extends Phaser.State {
 			text.text = text.finalText;
 			game.add.existing(new ButtonText(158, 282, 'BEGIN', this.startGame, this));
 			game.add.existing(new ButtonText(158, 304, 'CREDITS', this.viewCredits, this));
-			this.soundButton = game.add.existing(new ButtonText(158, 326, 'SOUND: ON', this.toggleSound, this));
+			this.soundButton = game.add.existing(new ButtonText(158, 326, 'SOUND: ' + this.soundOptions[game.soundSetting], this.toggleSound, this));
 		}
 	}
 
@@ -50,8 +51,16 @@ export default class MenuState extends Phaser.State {
 	}
 	
 	toggleSound() {
-		game.sound.mute = !game.sound.mute;
-		game.sfx.gun.play();
-		this.soundButton.text = 'SOUND: ' + (game.sound.mute ? 'OFF' : 'ON');
+		game.soundSetting = (game.soundSetting + 1) % 3;
+		if (game.soundSetting == 0) {
+			game.sfx.music.play();
+		} else if (game.soundSetting == 1) {
+			game.sound.mute = true;
+			game.sfx.music.pause();
+		} else if (game.soundSetting == 2) {
+			game.sound.mute = false;
+			game.sfx.gun.play();
+		}
+		this.soundButton.text = 'SOUND: ' + this.soundOptions[game.soundSetting];
 	}
 }

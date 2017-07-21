@@ -6,8 +6,8 @@ export default class CreditsState extends Phaser.State {
 		this.background = game.add.image(0, 0, 'background');
 		this.display = game.add.image(0, 100, 'display');
 		var topText = game.add.text(158, 150, String.fromCharCode(9608), { font: '15px monospace', fill: '#00ff00', align: 'center'});
-		topText.fullText = 'DESIGN, PROGRAMMING, ART\nCHRIS KLIMOWSKI\n\nMUSIC\nGAMESOUNDS.XYZ\n\nSOUND EFFECTS\nFREESOUND.ORG\n\nBACK';
-		topText.finalText = 'DESIGN, PROGRAMMING, ART\nCHRIS KLIMOWSKI\n\nMUSIC\nGAMESOUNDS.XYZ\n\nSOUND EFFECTS\nFREESOUND.ORG';
+		topText.fullText = 'DESIGN, PROGRAMMING, ART\nCHRIS KLIMOWSKI\n\nMUSIC\nINCOMPETECH\n\nSOUND EFFECTS\nFREESOUND.ORG\n\nBACK';
+		topText.finalText = 'DESIGN, PROGRAMMING, ART\nCHRIS KLIMOWSKI\n\nMUSIC\nINCOMPETECH\n\nSOUND EFFECTS\nFREESOUND.ORG';
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);
 
