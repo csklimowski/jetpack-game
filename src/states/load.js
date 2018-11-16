@@ -34,6 +34,8 @@ export default class LoadState extends Phaser.State {
 		game.load.audio('combo-2', 'sfx/combo-2.ogg');
 		game.load.audio('combo-3', 'sfx/combo-3.ogg');
 		game.load.audio('combo-4', 'sfx/combo-4.ogg');
+		game.load.bitmapFont('normal', 'font/normal.png', 'font/normal.fnt');
+		game.load.bitmapFont('inverted', 'font/inverted.png', 'font/inverted.fnt');
 	}
 
 	create() {

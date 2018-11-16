@@ -18,9 +18,11 @@ export default class MenuState extends Phaser.State {
 		} while (description.length > 31);
 
 		var testNumber = Math.floor(Math.random() * 10000);
-		this.soundOptions = ['ON', 'OFF', 'SFX ONLY']
-		
-		var topText = game.add.text(158, 150, String.fromCharCode(9608), { font: '15px monospace', fill: '#00ff00', align: 'center'});
+		this.soundOptions = ['ON', 'OFF', 'SFX ONLY'];
+
+		var topText = game.add.bitmapText(158, 150, 'normal', String.fromCharCode(9608), 18);
+		topText.align = 'center';
+		topText.anchor.set(0.5, 0);
 		topText.finalText = 'CFD INTERNAL PROTOTYPE\n"JETTISON PACK"\n' + description + '\nTEST #' + testNumber;
 		topText.fullText = topText.finalText + '\n\n\nBEGIN\nCREDITS\nSOUND: ' + this.soundOptions[game.soundSetting];
 		topText.progress = 0;
