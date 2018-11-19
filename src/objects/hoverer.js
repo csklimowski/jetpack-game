@@ -5,8 +5,8 @@ export default class Hoverer extends Phaser.Group {
 	constructor(x, y, inverted, moving) {
 		super(game);
 
-		if (x < 157) this.x = -50;
-		else         this.x = 365;
+		if (x < 315) this.x = -100;
+		else         this.x = 730;
 		this.y = y;
 
 		this.moving = moving;
@@ -35,9 +35,9 @@ export default class Hoverer extends Phaser.Group {
 		
 		game.physics.arcade.enable(this.robody);
 		this.robody.body.immovable = true;
-		this.robody.body.offset.set(8);
-		this.robody.body.width = 32;
-		this.robody.body.height = 44;
+		this.robody.body.offset.set(16);
+		this.robody.body.width = 64;
+		this.robody.body.height = 88;
 
 		this.add(this.eye);
 		this.add(this.robody);
@@ -47,19 +47,19 @@ export default class Hoverer extends Phaser.Group {
 
 	update() {
 		if (this.moving) {
-			if (this.x > 275) {
-				this.vx = -1.5;
-			} else if (this.x < 40) {
-				this.vx = 1.5;
+			if (this.x > 550) {
+				this.vx = -3;
+			} else if (this.x < 80) {
+				this.vx = 3;
 			}
 			this.x += this.vx;
 		}
 		if (this.dead) {
-			if (this.inverted) this.y -= 2;
-			else               this.y += 2;
+			if (this.inverted) this.y -= 4;
+			else               this.y += 4;
 			this.angle += 2;
 		} else {
-			this.y += 1.5*Math.sin(game.time.now);
+			this.y += Math.sin(0.005*game.time.now);
 		}
 	}
 

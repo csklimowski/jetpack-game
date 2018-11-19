@@ -17,8 +17,8 @@ export default class Slicer extends Hoverer {
         this.blade.angle = Math.random() * 360;
         this.blade.animations.play('spin');
         game.physics.arcade.enable(this.blade);
-        this.blade.body.width = 20;
-        this.blade.body.height = 20;
+        this.blade.body.width = 40;
+        this.blade.body.height = 40;
 
         this.add(this.blade);
 		this.enemyType = 2;
@@ -27,7 +27,7 @@ export default class Slicer extends Hoverer {
     update() {
         super.update();
         this.blade.angle += 1;
-        this.blade.body.offset.x = Math.sin(this.blade.rotation)*70 + 5;
-        this.blade.body.offset.y = -Math.cos(this.blade.rotation)*70 + 80;
+        this.blade.body.offset.x = Math.sin(this.blade.rotation)*140 + 10;
+        this.blade.body.offset.y = -Math.cos(this.blade.rotation)*140 + 160;
     }
 }

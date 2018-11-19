@@ -33,10 +33,10 @@ export default class Gunner extends Hoverer {
 	fire() {
 		game.sfx.gun.play();
 		this.gun.animations.play('fire');
-		this.bullet.x = this.x + Math.cos(this.gun.rotation)*30;
-		this.bullet.y = this.y + Math.sin(this.gun.rotation)*30;
+		this.bullet.x = this.x + Math.cos(this.gun.rotation)*60;
+		this.bullet.y = this.y + Math.sin(this.gun.rotation)*60;
 		this.bullet.rotation = this.gun.rotation;
-		this.bullet.body.velocity.x = 350*Math.cos(this.gun.rotation);
-		this.bullet.body.velocity.y = 350*Math.sin(this.gun.rotation);
+		this.bullet.body.velocity.x = 700*Math.cos(this.gun.rotation);
+		this.bullet.body.velocity.y = 700*Math.sin(this.gun.rotation);
 	}
 }

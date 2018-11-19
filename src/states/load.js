@@ -2,19 +2,24 @@ import game from '../jetpack';
 
 export default class LoadState extends Phaser.State {
 	preload() {
-		game.add.text(158, 150, 'Loading...', { font: '15px monospace', fill: '#00ff00', align: 'center'}).anchor.set(0.5);
-		game.load.spritesheet('player', 'img/player.png', 32, 43);
-		game.load.spritesheet('background', 'img/bg.png', 315, 1000);
-		game.load.spritesheet('hoverer', 'img/hoverer.png', 48, 60);
-		game.load.spritesheet('gun', 'img/gun.png', 35, 20);
-		game.load.spritesheet('blade', 'img/blade.png', 34, 87);
-		game.load.spritesheet('eye', 'img/eye.png', 20, 20);
-		game.load.spritesheet('shards', 'img/shards.png', 24, 24);
-		game.load.spritesheet('bullet', 'img/bullet.png', 15, 10);
-		game.load.spritesheet('arrows', 'img/arrows.png', 76, 76);
-		game.load.spritesheet('lifebar', 'img/lifebar.png', 30, 18);
-		game.load.spritesheet('triangle', 'img/triangle.png', 20, 20);
-		game.load.spritesheet('combo', 'img/combo.png', 30, 20);
+		game.add.text(315, 300, 'Loading...', { font: '30px monospace', fill: '#00ff00', align: 'center'}).anchor.set(0.5);
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        game.scale.windowConstraints.bottom = 'layout';
+        game.scale.pageAlignHorizontally = true;
+		game.scale.pageAlignVertically = true;
+		
+		game.load.spritesheet('player', 'img/player.png', 64, 86);
+		game.load.spritesheet('background', 'img/bg.png', 630, 2000);
+		game.load.spritesheet('hoverer', 'img/hoverer.png', 96, 120);
+		game.load.spritesheet('gun', 'img/gun.png', 70, 40);
+		game.load.spritesheet('blade', 'img/blade.png', 68, 174);
+		game.load.spritesheet('eye', 'img/eye.png', 40, 40);
+		game.load.spritesheet('shards', 'img/shards.png', 48, 48);
+		game.load.spritesheet('bullet', 'img/bullet.png', 30, 20);
+		game.load.spritesheet('arrows', 'img/arrows.png', 150, 150);
+		game.load.spritesheet('lifebar', 'img/lifebar.png', 60, 36);
+		game.load.spritesheet('triangle', 'img/triangle.png', 40, 40);
+		game.load.spritesheet('combo', 'img/combo.png', 60, 40);
 		game.load.image('smoke', 'img/smoke.png');
 		game.load.image('fire', 'img/fire.png');
 		game.load.image('display', 'img/display.png');
@@ -34,6 +39,7 @@ export default class LoadState extends Phaser.State {
 		game.load.audio('combo-2', 'sfx/combo-2.ogg');
 		game.load.audio('combo-3', 'sfx/combo-3.ogg');
 		game.load.audio('combo-4', 'sfx/combo-4.ogg');
+		
 		game.load.bitmapFont('normal', 'font/normal.png', 'font/normal.fnt');
 		game.load.bitmapFont('inverted', 'font/inverted.png', 'font/inverted.fnt');
 	}
@@ -64,6 +70,6 @@ export default class LoadState extends Phaser.State {
 		console.log(' _ _ _ _ _ \n|  _|  _| |\n| |_  |   |\n|_ _|_|_ _|');
 		game.soundSetting = 0;
 		game.sfx.music.play();
-		game.state.start('menu');
+		game.state.start('main');
 	}
 }
