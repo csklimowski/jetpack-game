@@ -11,8 +11,8 @@ export default class LoadState extends Phaser.State {
 		game.load.spritesheet('player', 'img/player.png', 64, 86);
 		game.load.spritesheet('background', 'img/bg.png', 630, 2000);
 		game.load.spritesheet('hoverer', 'img/hoverer.png', 96, 120);
-		game.load.spritesheet('gun', 'img/gun.png', 70, 40);
-		game.load.spritesheet('blade', 'img/blade.png', 68, 174);
+		game.load.spritesheet('gun', 'img/gun.png', 67, 40);
+		game.load.spritesheet('blade', 'img/blade.png', 68, 175);
 		game.load.spritesheet('eye', 'img/eye.png', 40, 40);
 		game.load.spritesheet('shards', 'img/shards.png', 48, 48);
 		game.load.spritesheet('bullet', 'img/bullet.png', 30, 20);
