@@ -49,7 +49,6 @@ export default class LoadState extends Phaser.State {
 		
 		game.load.bitmapFont('green', 'font/green.png', 'font/green.fnt');
 		game.load.bitmapFont('white', 'font/white.png', 'font/white.fnt');
-		game.load.bitmapFont('inverted', 'font/inverted.png', 'font/inverted.fnt');
 	}
 
 	create() {
