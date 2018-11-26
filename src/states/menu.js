@@ -19,13 +19,26 @@ export default class MenuState extends Phaser.State {
 		} while (description.length > 30);
 
 		var testNumber = Math.floor(Math.random() * 10000);
-		this.soundOptions = ['ON', 'OFF', 'SFX ONLY'];
+		this.soundOptions = [
+			{
+				image: 'sound-on',
+				text: 'ON'
+			},
+			{
+				image: 'sound-off',
+				text: 'OFF'
+			},
+			{
+				image: 'sound-sfx-only',
+				text: 'SFX ONLY'
+			}
+		];
 
 		var topText = game.add.bitmapText(316, 1210, 'green', String.fromCharCode(9608), 32);
 		topText.align = 'center';
 		topText.anchor.set(0.5, 0);
 		topText.finalText = 'CFD INTERNAL PROTOTYPE\n"JETTISON PACK"\n' + description + '\nTEST #' + testNumber;
-		topText.fullText = topText.finalText + '\n\n\n\nBEGIN\nCREDITS\nSOUND: ' + this.soundOptions[game.soundSetting];
+		topText.fullText = topText.finalText + '\n\n\n\nBEGIN\nCREDITS\nSOUND: ' + this.soundOptions[game.soundSetting].text;
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);
 
@@ -41,7 +54,7 @@ export default class MenuState extends Phaser.State {
 			text.text = text.finalText;
 			game.add.button(265, 1485, 'begin', this.startGame, this, 1, 0, 1, 0);
 			game.add.button(247, 1525, 'credits', this.viewCredits, this, 1, 0, 1, 0);
-			this.soundButton = game.add.button(315, 1565, 'sound-on', this.toggleSound, this, 1, 0, 1, 0);
+			this.soundButton = game.add.button(315, 1565, this.soundOptions[game.soundSetting].image, this.toggleSound, this, 1, 0, 1, 0);
 			this.soundButton.anchor.set(0.5, 0);
 		}
 	}
