@@ -5,11 +5,12 @@ export default class ResultsState extends Phaser.State {
 	create() {
 		game.sfx.helicopter.stop();
 		this.background = game.add.image(0, 0, 'background', 1);
-		this.display = game.add.image(0, 540, 'display');
+		this.display = game.add.image(0, 1080, 'display');
 		this.camera.y = 1000;
-		var topText = game.add.text(158, 590, String.fromCharCode(9608), { font: '15px monospace', fill: '#00ff00', align: 'center'});
+		var topText = game.add.bitmapText(316, 1330, 'green', String.fromCharCode(9608), 32);
 		topText.finalText = 'TEST TERMINATED\n\nSCORE: ' + game.score;
 		topText.fullText = topText.finalText + '\n\n\n\n\n\nRETURN';
+		topText.align = 'center';
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);
 
@@ -23,7 +24,7 @@ export default class ResultsState extends Phaser.State {
 		if (text.progress == text.fullText.length) {
 			game.sfx.beep.stop();
 			text.text = text.finalText;
-			game.add.existing(new ButtonText(158, 767, 'RETURN', this.return, this));
+			game.add.button(244, 1686, 'return', this.return, this, 1, 0, 1, 0);
 		}
 	}
 

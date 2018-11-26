@@ -8,7 +8,6 @@ import ComboText from '../objects/combotext';
 
 export default class MainState extends Phaser.State {
 	create() {
-		game.world.setBounds(0, 0, 630, 2000);
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		this.background = game.add.image(0, 0, 'background');
@@ -26,10 +25,8 @@ export default class MainState extends Phaser.State {
 
 		game.score = 0;
 		this.visibleScore = 0;
-		this.scoreDisplay = game.add.text(5, 0, '00000', {
-			font: "30px monospace",
-			fill: "white"
-		});
+		this.scoreDisplay = game.add.bitmapText(550, 5, 'white', '0');
+		this.scoreDisplay.anchor.set(1, 0);
 		this.lifebar = game.add.sprite(560, 10, 'lifebar');
 
 		this.display = game.add.sprite(0, 1080, 'display');
@@ -71,7 +68,7 @@ export default class MainState extends Phaser.State {
 		} else {
 			game.sfx.beep.stop();
 		}
-		this.scoreDisplay.y = game.camera.y + 10;
+		this.scoreDisplay.y = game.camera.y + 12;
 		this.scoreDisplay.text = Math.floor(this.visibleScore);
 		this.lifebar.y = game.camera.y + 10;
 

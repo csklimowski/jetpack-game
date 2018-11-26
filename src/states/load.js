@@ -20,6 +20,13 @@ export default class LoadState extends Phaser.State {
 		game.load.spritesheet('lifebar', 'img/lifebar.png', 60, 36);
 		game.load.spritesheet('triangle', 'img/triangle.png', 40, 40);
 		game.load.spritesheet('combo', 'img/combo.png', 60, 40);
+		game.load.spritesheet('pause', 'img/pause.png', 60, 60);
+		game.load.spritesheet('begin', 'img/begin.png', 100, 40);
+		game.load.spritesheet('credits', 'img/credits.png', 136, 40);
+		game.load.spritesheet('sound-on', 'img/sound-on.png', 169, 40);
+		game.load.spritesheet('sound-off', 'img/sound-off.png', 187, 40);
+		game.load.spritesheet('sound-sfx-only', 'img/sound-sfx-only.png', 274, 40);
+		game.load.spritesheet('return', 'img/return.png', 117, 40);
 		game.load.image('smoke', 'img/smoke.png');
 		game.load.image('fire', 'img/fire.png');
 		game.load.image('display', 'img/display.png');
@@ -40,7 +47,8 @@ export default class LoadState extends Phaser.State {
 		game.load.audio('combo-3', 'sfx/combo-3.ogg');
 		game.load.audio('combo-4', 'sfx/combo-4.ogg');
 		
-		game.load.bitmapFont('normal', 'font/normal.png', 'font/normal.fnt');
+		game.load.bitmapFont('green', 'font/green.png', 'font/green.fnt');
+		game.load.bitmapFont('white', 'font/white.png', 'font/white.fnt');
 		game.load.bitmapFont('inverted', 'font/inverted.png', 'font/inverted.fnt');
 	}
 
@@ -70,6 +78,7 @@ export default class LoadState extends Phaser.State {
 		console.log(' _ _ _ _ _ \n|  _|  _| |\n| |_  |   |\n|_ _|_|_ _|');
 		game.soundSetting = 0;
 		game.sfx.music.play();
-		game.state.start('main');
+		game.world.setBounds(0, 0, 630, 2000);
+		game.state.start('menu');
 	}
 }
