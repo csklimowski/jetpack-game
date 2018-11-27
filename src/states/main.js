@@ -28,12 +28,11 @@ export default class MainState extends Phaser.State {
 		this.scoreDisplay = game.add.bitmapText(550, 5, 'white', '0');
 		this.scoreDisplay.anchor.set(1, 0);
 		this.lifebar = game.add.sprite(560, 10, 'lifebar');
+		this.pauseButton = game.add.sprite(0, 0, 'pause');
 
 		this.display = game.add.sprite(0, 1080, 'display');
 		game.add.tween(this.display).to({x: 630}, 500).start();
-		game.input.keyboard.addKey(Phaser.KeyCode.ESC).onDown.add(function() {
-			game.paused = !game.paused
-		}, this);
+		game.input.keyboard.addKey(Phaser.KeyCode.ESC).onDown.add(this.pauseGame, this);
 
 		game.time.events.add(1000, function() {
 			game.sfx.floodlights.play();
@@ -56,6 +55,12 @@ export default class MainState extends Phaser.State {
 			}, this);
 		}, this);
 
+		game.input.onDown.add(function(event) {
+			if (event.x <= 60 && event.y <= 60) {
+				this.pauseGame();
+			}
+		}, this);
+
 		this.level = 1;
 		this.awaitingNewWave = true;
 	}
@@ -71,6 +76,7 @@ export default class MainState extends Phaser.State {
 		this.scoreDisplay.y = game.camera.y + 12;
 		this.scoreDisplay.text = Math.floor(this.visibleScore);
 		this.lifebar.y = game.camera.y + 10;
+		this.pauseButton.y = game.camera.y;
 
 		if (this.enemies.length == 0 && !this.awaitingNewWave) {
 			game.sfx.helicopter.stop();
@@ -96,6 +102,15 @@ export default class MainState extends Phaser.State {
 
 		game.camera.y = game.camera.y + Math.max(0, 40 - this.shakeProgress) * Math.sin(this.shakeProgress);
 		this.shakeProgress += 2.5;
+	}
+	
+	pauseGame() {
+		game.paused = !game.paused;
+		if (game.paused) {
+			this.pauseButton.frame = 1;
+		} else {
+			this.pauseButton.frame = 0;
+		}
 	}
 
 	updateEnemy(enemy) {
