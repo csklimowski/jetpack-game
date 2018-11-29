@@ -2,3 +2,4 @@ node_modules
 js/jetpack.js
 typings
 jsconfig.json
+package-lock.json

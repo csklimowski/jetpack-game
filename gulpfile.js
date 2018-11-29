@@ -8,14 +8,24 @@ var connect = require('gulp-connect');
 gulp.task('build', function() {
 	gulp.src('./src/**/*.js')
 		.pipe(rollup({
-	  		entry: './src/jetpack.js',
+	  		input: './src/jetpack.js',
 			format: 'iife',
-			moduleName: 'jetpack'
+			name: 'jetpack'
 		}))
 		.pipe(babel({
 			presets: ['es2015']
 		}))
 		.pipe(uglify())
+		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('bundle', function() {
+	gulp.src('./src/**/*.js')
+		.pipe(rollup({
+	  		input: './src/jetpack.js',
+			format: 'iife',
+			name: 'jetpack'
+		}))
 		.pipe(gulp.dest('js'))
 		.pipe(connect.reload());
 });
@@ -28,7 +38,7 @@ gulp.task('serve', function() {
 });
 
 gulp.task('watch', function() {
-	gulp.watch(['./src/**'], ['build']);
+	gulp.watch(['./src/**'], ['bundle']);
 })
 
-gulp.task('default', ['build', 'serve', 'watch']);
+gulp.task('develop', ['bundle', 'serve', 'watch']);
