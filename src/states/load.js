@@ -86,7 +86,11 @@ export default class LoadState extends Phaser.State {
 			};
 		}
 		
-		game.sfx.music.play();
+		if (game.data.soundSetting == 0) {
+			game.sfx.music.play();
+		} else if (game.data.soundSetting == 1) {
+			game.sound.mute = true;
+		}
 		game.world.setBounds(0, 0, 630, 2000);
 		game.state.start('menu');
 		
