@@ -1,5 +1,4 @@
 import game from '../jetpack';
-import ButtonText from '../objects/buttontext';
 
 export default class ResultsState extends Phaser.State {
 	create() {

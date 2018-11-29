@@ -1,5 +1,4 @@
 import game from '../jetpack';
-import ButtonText from '../objects/buttontext';
 
 export default class CreditsState extends Phaser.State {
 	create() {
@@ -8,8 +7,8 @@ export default class CreditsState extends Phaser.State {
 		this.camera.y = 1000;
 
 		var topText = game.add.bitmapText(316, 1210, 'green', String.fromCharCode(9608), 32);
-		topText.fullText = 'DESIGN, PROGRAMMING, ART\nCHRIS KLIMOWSKI\n\nMUSIC\nINCOMPETECH\n\nSOUND EFFECTS\nFREESOUND.ORG\n\nRETURN';
 		topText.finalText = 'DESIGN, PROGRAMMING, ART\nCHRIS KLIMOWSKI\n\nMUSIC\nINCOMPETECH\n\nSOUND EFFECTS\nFREESOUND.ORG';
+		topText.fullText = topText.finalText + '\n\nRETURN';
 		topText.align = 'center';
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);
@@ -24,11 +23,11 @@ export default class CreditsState extends Phaser.State {
 		if (text.progress == text.fullText.length) {
 			game.sfx.beep.stop();
 			text.text = text.finalText;
-			game.add.button(264, 1566, 'return', this.goBack, this, 1, 0, 1, 0);
+			game.add.button(264, 1566, 'return', this.return, this, 1, 0, 1, 0);
 		}
 	}
 	
-	goBack() {
+	return() {
 		game.state.start('menu');
 	}
 }

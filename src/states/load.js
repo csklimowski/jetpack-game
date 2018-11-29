@@ -27,6 +27,7 @@ export default class LoadState extends Phaser.State {
 		game.load.spritesheet('sound-off', 'img/sound-off.png', 187, 40);
 		game.load.spritesheet('sound-sfx-only', 'img/sound-sfx-only.png', 274, 40);
 		game.load.spritesheet('return', 'img/return.png', 117, 40);
+
 		game.load.image('smoke', 'img/smoke.png');
 		game.load.image('fire', 'img/fire.png');
 		game.load.image('display', 'img/display.png');
@@ -74,10 +75,12 @@ export default class LoadState extends Phaser.State {
 				game.add.audio('combo-4', 1, false)
 			]
 		}
-		console.log(' _ _ _ _ _ \n|  _|  _| |\n| |_  |   |\n|_ _|_|_ _|');
+		
 		game.soundSetting = 0;
 		game.sfx.music.play();
 		game.world.setBounds(0, 0, 630, 2000);
 		game.state.start('menu');
+		
+		console.log(' _ _ _ _ _ \n|  _|  _| |\n| |_  |   |\n|_ _|_|_ _|');
 	}
 }
