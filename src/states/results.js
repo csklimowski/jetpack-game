@@ -6,10 +6,33 @@ export default class ResultsState extends Phaser.State {
 		this.background = game.add.image(0, 0, 'background', 1);
 		this.display = game.add.image(0, 1080, 'display');
 		this.camera.y = 1000;
-		
-		var topText = game.add.bitmapText(316, 1210, 'green', String.fromCharCode(9608), 32);
-		topText.finalText = 'TEST TERMINATED\n\nSCORE: ' + game.score;
-		topText.fullText = topText.finalText + '\n\n\n\n\n\n\nRETURN';
+
+		let topText = game.add.bitmapText(316, 1210, 'green', String.fromCharCode(9608), 32);
+		let reasonText, scoreText;
+
+		let r1 = ['TRAGIC ', 'UNFORTUNATE ', 'CATASTROPHIC ', 'UNFORESEEN ', 'MINOR ', 'REGRETTABLE '];
+		let r2 = ['AI ', 'ROBOTIC ', 'AUTOMATON ', 'EQUIPMENT ', 'TECHNOLOGICAL ', 'PROGRAMMING '];
+		let r3 = ['FAILURE', 'MISTAKE', 'MISHAP', 'COMPLICATION', 'ACCIDENT', 'BUG'];
+		do {
+			reasonText = 
+				r1[Math.floor(Math.random() * r1.length)] +
+				r2[Math.floor(Math.random() * r2.length)] +
+				r3[Math.floor(Math.random() * r3.length)];
+		} while (reasonText.length > 30);
+
+		if (game.score > game.data.highScore) {
+			game.data.highScore = game.score;
+			Cookies.set('blast_down_data',
+				JSON.stringify(game.data),
+				{expires: 365}
+			);
+			scoreText = 'NEW PERSONAL BEST!';
+		} else {
+			scoreText = 'YOUR BEST: ' + game.data.highScore;
+		}
+
+		topText.finalText = 'TEST TERMINATED\n\nREASON:\n' + reasonText + '\n\nSCORE: ' + game.score + '\n' + scoreText;
+		topText.fullText = topText.finalText + '\n\n\nRETURN';
 		topText.align = 'center';
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);

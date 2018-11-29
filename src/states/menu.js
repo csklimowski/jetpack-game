@@ -37,7 +37,7 @@ export default class MenuState extends Phaser.State {
 		topText.align = 'center';
 		topText.anchor.set(0.5, 0);
 		topText.finalText = 'CFD INTERNAL PROTOTYPE\n"JETTISON PACK"\n' + description + '\nTEST #' + testNumber;
-		topText.fullText = topText.finalText + '\n\n\n\nBEGIN\nCREDITS\nSOUND: ' + this.soundOptions[game.soundSetting].text;
+		topText.fullText = topText.finalText + '\n\n\n\nBEGIN\nCREDITS\nSOUND: ' + this.soundOptions[game.data.soundSetting].text;
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);
 
@@ -53,7 +53,7 @@ export default class MenuState extends Phaser.State {
 			text.text = text.finalText;
 			game.add.button(265, 1485, 'begin', this.startGame, this, 1, 0, 1, 0);
 			game.add.button(247, 1525, 'credits', this.viewCredits, this, 1, 0, 1, 0);
-			this.soundButton = game.add.button(315, 1565, this.soundOptions[game.soundSetting].image, this.toggleSound, this, 1, 0, 1, 0);
+			this.soundButton = game.add.button(315, 1565, this.soundOptions[game.data.soundSetting].image, this.toggleSound, this, 1, 0, 1, 0);
 			this.soundButton.anchor.set(0.5, 0);
 		}
 	}
@@ -67,18 +67,22 @@ export default class MenuState extends Phaser.State {
 	}
 	
 	toggleSound() {
-		game.soundSetting = (game.soundSetting + 1) % 3;
-		if (game.soundSetting == 0) {
+		game.data.soundSetting = (game.data.soundSetting + 1) % 3;
+		if (game.data.soundSetting == 0) {
 			this.soundButton.loadTexture('sound-on');
 			game.sfx.music.play();
-		} else if (game.soundSetting == 1) {
+		} else if (game.data.soundSetting == 1) {
 			this.soundButton.loadTexture('sound-off');
 			game.sound.mute = true;
 			game.sfx.music.pause();
-		} else if (game.soundSetting == 2) {
+		} else if (game.data.soundSetting == 2) {
 			this.soundButton.loadTexture('sound-sfx-only');
 			game.sound.mute = false;
 			game.sfx.gun.play();
 		}
+		Cookies.set('blast_down_data',
+			JSON.stringify(game.data),
+			{expires: 365}
+		);
 	}
 }

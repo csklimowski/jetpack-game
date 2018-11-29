@@ -75,11 +75,20 @@ export default class LoadState extends Phaser.State {
 				game.add.audio('combo-4', 1, false)
 			]
 		}
+
+		if (Cookies.get('blast_down_data')) {
+			let dataString = Cookies.get('blast_down_data');
+			game.data = JSON.parse(dataString);
+		} else {
+			game.data = {
+				highScore: 0,
+				soundSetting: 0
+			};
+		}
 		
-		game.soundSetting = 0;
 		game.sfx.music.play();
 		game.world.setBounds(0, 0, 630, 2000);
-		game.state.start('menu');
+		game.state.start('results');
 		
 		console.log(' _ _ _ _ _ \n|  _|  _| |\n| |_  |   |\n|_ _|_|_ _|');
 	}
