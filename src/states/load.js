@@ -88,7 +88,7 @@ export default class LoadState extends Phaser.State {
 		
 		game.sfx.music.play();
 		game.world.setBounds(0, 0, 630, 2000);
-		game.state.start('results');
+		game.state.start('menu');
 		
 		console.log(' _ _ _ _ _ \n|  _|  _| |\n| |_  |   |\n|_ _|_|_ _|');
 	}
