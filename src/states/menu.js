@@ -1,10 +1,10 @@
 import game from '../jetpack';
-import ButtonText from '../objects/buttontext';
 
 export default class MenuState extends Phaser.State {
 	create() {
 		this.background = game.add.image(0, 0, 'background');
-		this.display = game.add.image(0, 100, 'display');
+		this.display = game.add.image(0, 1080, 'display');
+		game.camera.y = 1000;
 
 		var desc1 = ['PERSONAL ', 'COMPACT ', 'BACK-MOUNTED ', 'PORTABLE ', 'SMALL-SCALE ', 'MINIATURE '];
 		var desc2 = ['FLYING ', 'LEVITATION ', 'HOVERING ', 'UN-FALLING ', 'AVIATION ', 'ASCENSION '];
@@ -15,14 +15,29 @@ export default class MenuState extends Phaser.State {
 				desc1[Math.floor(Math.random() * desc1.length)] +
 				desc2[Math.floor(Math.random() * desc2.length)] +
 				desc3[Math.floor(Math.random() * desc3.length)];
-		} while (description.length > 31);
+		} while (description.length > 30);
 
 		var testNumber = Math.floor(Math.random() * 10000);
-		this.soundOptions = ['ON', 'OFF', 'SFX ONLY']
-		
-		var topText = game.add.text(158, 150, String.fromCharCode(9608), { font: '15px monospace', fill: '#00ff00', align: 'center'});
+		this.soundOptions = [
+			{
+				image: 'sound-on',
+				text: 'ON'
+			},
+			{
+				image: 'sound-off',
+				text: 'OFF'
+			},
+			{
+				image: 'sound-sfx-only',
+				text: 'SFX ONLY'
+			}
+		];
+
+		var topText = game.add.bitmapText(316, 1210, 'green', String.fromCharCode(9608), 32);
+		topText.align = 'center';
+		topText.anchor.set(0.5, 0);
 		topText.finalText = 'CFD INTERNAL PROTOTYPE\n"JETTISON PACK"\n' + description + '\nTEST #' + testNumber;
-		topText.fullText = topText.finalText + '\n\n\nBEGIN\nCREDITS\nSOUND: ' + this.soundOptions[game.soundSetting];
+		topText.fullText = topText.finalText + '\n\n\n\nBEGIN\nCREDITS\nSOUND: ' + this.soundOptions[game.data.soundSetting].text;
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);
 
@@ -33,12 +48,13 @@ export default class MenuState extends Phaser.State {
 	updateText(text) {
 		text.text = text.text.substring(0, text.text.length - 1) + text.fullText.charAt(text.progress) + String.fromCharCode(9608);
 		text.progress++;
-		if (text.progress == text.fullText.length) {
+		if (text.progress === text.fullText.length) {
 			game.sfx.beep.stop();
 			text.text = text.finalText;
-			game.add.existing(new ButtonText(158, 282, 'BEGIN', this.startGame, this));
-			game.add.existing(new ButtonText(158, 304, 'CREDITS', this.viewCredits, this));
-			this.soundButton = game.add.existing(new ButtonText(158, 326, 'SOUND: ' + this.soundOptions[game.soundSetting], this.toggleSound, this));
+			game.add.button(265, 1485, 'begin', this.startGame, this, 1, 0, 1, 0);
+			game.add.button(247, 1525, 'credits', this.viewCredits, this, 1, 0, 1, 0);
+			this.soundButton = game.add.button(315, 1565, this.soundOptions[game.data.soundSetting].image, this.toggleSound, this, 1, 0, 1, 0);
+			this.soundButton.anchor.set(0.5, 0);
 		}
 	}
 
@@ -51,16 +67,22 @@ export default class MenuState extends Phaser.State {
 	}
 	
 	toggleSound() {
-		game.soundSetting = (game.soundSetting + 1) % 3;
-		if (game.soundSetting == 0) {
+		game.data.soundSetting = (game.data.soundSetting + 1) % 3;
+		if (game.data.soundSetting == 0) {
+			this.soundButton.loadTexture('sound-on');
 			game.sfx.music.play();
-		} else if (game.soundSetting == 1) {
+		} else if (game.data.soundSetting == 1) {
+			this.soundButton.loadTexture('sound-off');
 			game.sound.mute = true;
 			game.sfx.music.pause();
-		} else if (game.soundSetting == 2) {
+		} else if (game.data.soundSetting == 2) {
+			this.soundButton.loadTexture('sound-sfx-only');
 			game.sound.mute = false;
 			game.sfx.gun.play();
 		}
-		this.soundButton.text = 'SOUND: ' + this.soundOptions[game.soundSetting];
+		Cookies.set('blast_down_data',
+			JSON.stringify(game.data),
+			{expires: 365}
+		);
 	}
 }

@@ -3,12 +3,12 @@ import game from '../jetpack';
 export default class Exploder extends Phaser.Particles.Arcade.Emitter {
 	constructor() {
 		super(game);
-		this.gravity = 800;
-		this.minParticleSpeed.set(-300, -200);
-		this.maxParticleSpeed.set(300, -600);
+		this.gravity = 1600;
+		this.minParticleSpeed.set(-600, -400);
+		this.maxParticleSpeed.set(600, -1200);
 
 		this.smoke = game.add.emitter();
-		this.smoke.gravity = -200;
+		this.smoke.gravity = -400;
 		this.smoke.makeParticles('smoke');
 		this.smoke.setScale(0.5, 2, 0.5, 2, 1000);
 		this.smoke.setAlpha(1, 0, 2000);

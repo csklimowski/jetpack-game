@@ -8,72 +8,55 @@ import ComboText from '../objects/combotext';
 
 export default class MainState extends Phaser.State {
 	create() {
-		game.world.setBounds(0, 0, 315, 1000);
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		this.background = game.add.image(0, 0, 'background');
 		this.graphics = game.add.graphics(0, 0);
-		this.exploder = new Exploder();
 		
-		this.player = new Player(150, 700);
-		this.enemies = game.add.group();
-		this.shakeProgress = 20;
+		this.exploder = new Exploder();
+		this.shakeProgress = 40;
 
-		this.multiplier = 0;
+		this.enemies = game.add.group();
+		this.player = new Player(315, 1400);
+		
 		this.comboText = new ComboText();
+		this.multiplier = 0;
 		this.lastWasInverted = false;
 		this.noBotsHit = true;
 
 		game.score = 0;
 		this.visibleScore = 0;
-		this.scoreDisplay = game.add.text(5, 0, '00000', {
-			font: "15px monospace",
-			fill: "white"
-		});
-		this.lifebar = game.add.sprite(280, 5, 'lifebar');
+		this.scoreDisplay = game.add.bitmapText(550, 5, 'white', '0');
+		this.scoreDisplay.anchor.set(1, 0);
+		
+		this.lifebar = game.add.sprite(560, 10, 'lifebar');
+		this.pauseButton = game.add.sprite(0, 0, 'pause');
 
-		this.display = game.add.sprite(0, 540, 'display');
-		game.add.tween(this.display).to({x: 315}, 500).start();
-		game.input.keyboard.addKey(Phaser.KeyCode.ESC).onDown.add(function() {
-			game.paused = !game.paused
-		}, this);
-
-		game.time.events.add(1000, function() {
-			game.sfx.floodlights.play();
-			this.background.frame = 1;
-			this.tutorialArrows = {
-				left: game.add.sprite(25, 480, 'arrows', 0),
-				down: game.add.sprite(120, 480, 'arrows', 1),
-				right: game.add.sprite(215, 480, 'arrows', 2)
-			};
-
-			game.input.keyboard.addKey(Phaser.KeyCode.LEFT).onDown.addOnce(function() {
-				game.add.tween(this.tutorialArrows.left).to({alpha: 0}, 1000).start();
-			}, this);
-			game.input.keyboard.addKey(Phaser.KeyCode.DOWN).onDown.addOnce(function() {
-				game.add.tween(this.tutorialArrows.down).to({alpha: 0}, 1000).start();
-				this.awaitingNewWave = false;
-			}, this);
-			game.input.keyboard.addKey(Phaser.KeyCode.RIGHT).onDown.addOnce(function() {
-				game.add.tween(this.tutorialArrows.right).to({alpha: 0}, 1000).start();
-			}, this);
-		}, this);
-
+		this.display = game.add.sprite(0, 1080, 'display');
+		game.add.tween(this.display).to({x: 630}, 500).start();
+		
+		game.input.keyboard.addKey(Phaser.KeyCode.ESC).onDown.add(this.pauseGame, this);
+		game.input.onDown.add(this.onInputDown, this);
+		
 		this.level = 1;
 		this.awaitingNewWave = true;
+
+		game.time.events.add(1000, this.lightsOn, this);
 	}
 
 	update() {
-		game.camera.y = this.player.body.y - 200;
+		game.camera.y = this.player.body.y - 400;
 
 		if (this.visibleScore < game.score) {
 			this.visibleScore = Math.min(this.visibleScore + 0.3, game.score);
 		} else {
 			game.sfx.beep.stop();
 		}
-		this.scoreDisplay.y = game.camera.y + 5;
+		this.scoreDisplay.y = game.camera.y + 12;
 		this.scoreDisplay.text = Math.floor(this.visibleScore);
-		this.lifebar.y = game.camera.y + 5;
+
+		this.lifebar.y = game.camera.y + 10;
+		this.pauseButton.y = game.camera.y;
 
 		if (this.enemies.length == 0 && !this.awaitingNewWave) {
 			game.sfx.helicopter.stop();
@@ -81,47 +64,83 @@ export default class MainState extends Phaser.State {
 			this.awaitingNewWave = true;
 		}
 
-		this.graphics.clear();
 		this.enemies.forEach(this.updateEnemy, this);
 
-		this.graphics.lineStyle(2, 0x000000, 1);
-		this.graphics.moveTo(0, 900);
-		if (this.player.body.y >= 860 && !this.player.dead) {
-			this.graphics.lineTo(this.player.body.x + 20, this.player.body.y + 40);
-		} else if (this.player.ly >= 860) {
+		this.graphics.clear();
+		this.graphics.lineStyle(4, 0x000000, 1);
+		this.graphics.moveTo(0, 1800);
+		if (this.player.body.y >= 1720 && !this.player.dead) {
+			this.graphics.lineTo(this.player.body.x + 40, this.player.body.y + 80);
+		} else if (this.player.ly >= 1720) {
 			if (this.noBotsHit) {
 				this.multiplier = 0;
 			} else {
 				this.noBotsHit = true;
 			}
 		}
-		this.graphics.lineTo(315, 900);
+		this.graphics.lineTo(630, 1800);
 
-		game.camera.y = game.camera.y + Math.max(0, 20 - this.shakeProgress) * Math.sin(this.shakeProgress);
-		this.shakeProgress += 1.25;
+		game.camera.y = game.camera.y + Math.max(0, 40 - this.shakeProgress) * Math.sin(this.shakeProgress);
+		this.shakeProgress += 2.5;
+	}
+
+	lightsOn() {
+		game.sfx.floodlights.play();
+		this.background.frame = 1;
+		this.tutorialArrows = {
+			left: game.add.sprite(50, 960, 'arrows', 0),
+			down: game.add.sprite(240, 960, 'arrows', 1),
+			right: game.add.sprite(430, 960, 'arrows', 2)
+		};
+
+		game.input.keyboard.addKey(Phaser.KeyCode.LEFT).onDown.addOnce(function() {
+			game.add.tween(this.tutorialArrows.left).to({alpha: 0}, 1000).start();
+		}, this);
+		game.input.keyboard.addKey(Phaser.KeyCode.DOWN).onDown.addOnce(function() {
+			game.add.tween(this.tutorialArrows.down).to({alpha: 0}, 1000).start();
+			this.awaitingNewWave = false;
+		}, this);
+		game.input.keyboard.addKey(Phaser.KeyCode.RIGHT).onDown.addOnce(function() {
+			game.add.tween(this.tutorialArrows.right).to({alpha: 0}, 1000).start();
+		}, this);
+	}
+
+	onInputDown(event) {
+		if (event.x <= 60 && event.y <= 60) {
+			this.pauseGame();
+		}
+	}
+
+	pauseGame() {
+		game.paused = !game.paused;
+		if (game.paused) {
+			this.pauseButton.frame = 1;
+		} else {
+			this.pauseButton.frame = 0;
+		}
 	}
 
 	updateEnemy(enemy) {
 		enemy.eye.rotation = game.physics.arcade.angleBetween(enemy, this.player);
 		if (!this.player.dead) {
 			game.physics.arcade.overlap(this.player, enemy.robody, this.playerHits, null, this);
-		}
-		if (enemy.enemyType == 2) {
-			if (!this.player.invincible && !this.player.dead && !enemy.dead) {
-				game.physics.arcade.overlap(this.player, enemy.blade, this.takeDamage, null, this);
+			if (enemy.enemyType == 2) {
+				if (!this.player.invincible && !enemy.dead) {
+					game.physics.arcade.overlap(this.player, enemy.blade, this.takeDamage, null, this);
+				}
 			}
-		}
-		if (enemy.enemyType == 3) {
-			enemy.gun.rotation = game.physics.arcade.angleBetween(enemy, this.player);
-			if (!this.player.invincible && !this.player.dead) {
-				game.physics.arcade.overlap(this.player, enemy.bullet, this.takeDamage, null, this);
+			if (enemy.enemyType == 3) {
+				enemy.gun.rotation = game.physics.arcade.angleBetween(enemy, this.player);
+				if (!this.player.invincible) {
+					game.physics.arcade.overlap(this.player, enemy.bullet, this.takeDamage, null, this);
+				}
 			}
 		}
 	}
 
 	playerHits(player, body) {
 		if (body.parent.inverted) {
-			if (player.lvy < -300 && !body.parent.dead) {
+			if (player.lvy < -600 && !body.parent.dead) {
 				if (body.parent.enemyType == 3) {
 					game.time.events.remove(body.parent.fireLoop);
 				}
@@ -132,13 +151,13 @@ export default class MainState extends Phaser.State {
 				body.parent.dead = true;
 				game.time.events.add(500, this.robotExplodes, this, body);
 			} else {
-				if (player.lvy > 0 && player.y < body.parent.y - 30) {
+				if (player.lvy > 0 && player.y < body.parent.y - 60) {
 					this.takeDamage();
 				}
 				game.physics.arcade.collide(player, body);
 			}
 		} else {
-			if (player.lvy > 300 && !body.parent.dead) {
+			if (player.lvy > 600 && !body.parent.dead) {
 				if (body.parent.enemyType == 3) {
 					game.time.events.remove(body.parent.fireLoop);
 				}
@@ -149,7 +168,7 @@ export default class MainState extends Phaser.State {
 				body.parent.dead = true;
 				game.time.events.add(500, this.robotExplodes, this, body);
 			} else {
-				if (player.lvy < 50 && player.y > body.parent.y + 30) {
+				if (player.lvy < 50 && player.y > body.parent.y + 60) {
 					this.takeDamage();
 				}
 				game.physics.arcade.collide(player, body);
@@ -187,8 +206,8 @@ export default class MainState extends Phaser.State {
 			game.sfx.beep.play();
 			this.shakeProgress = 0;
 			this.exploder.explodeEnemy(robody.parent.x, robody.parent.y, robody.parent.inverted);
-			this.player.body.velocity.y += 800*Math.sin(game.physics.arcade.angleBetween(robody.parent, this.player));
-			this.player.body.velocity.x += 1200*Math.cos(game.physics.arcade.angleBetween(robody.parent, this.player));
+			this.player.body.velocity.y += 1600*Math.sin(game.physics.arcade.angleBetween(robody.parent, this.player));
+			this.player.body.velocity.x += 2400*Math.cos(game.physics.arcade.angleBetween(robody.parent, this.player));
 
 			if (!this.noBotsHit || (robody.parent.inverted || this.lastWasInverted)) {
 				this.multiplier++;
@@ -214,8 +233,8 @@ export default class MainState extends Phaser.State {
 
 	newWave() {
 		var pointsLeft = this.level;
-		var heights = [350, 450, 550, 650, 750];
-		var positions = [30, 90, 157, 225, 285];
+		var heights = [700, 900, 1100, 1300, 1500];
+		var positions = [60, 180, 315, 450, 570];
 
 		while (pointsLeft > 0) {
 			var x = positions.splice(Math.floor(Math.random() * positions.length), 1)[0];

@@ -1,15 +1,39 @@
 import game from '../jetpack';
-import ButtonText from '../objects/buttontext';
 
 export default class ResultsState extends Phaser.State {
 	create() {
 		game.sfx.helicopter.stop();
 		this.background = game.add.image(0, 0, 'background', 1);
-		this.display = game.add.image(0, 540, 'display');
+		this.display = game.add.image(0, 1080, 'display');
 		this.camera.y = 1000;
-		var topText = game.add.text(158, 590, String.fromCharCode(9608), { font: '15px monospace', fill: '#00ff00', align: 'center'});
-		topText.finalText = 'TEST TERMINATED\n\nSCORE: ' + game.score;
-		topText.fullText = topText.finalText + '\n\n\n\n\n\nRETURN';
+
+		let topText = game.add.bitmapText(316, 1210, 'green', String.fromCharCode(9608), 32);
+		let reasonText, scoreText;
+
+		let r1 = ['TRAGIC ', 'UNFORTUNATE ', 'CATASTROPHIC ', 'UNFORESEEN ', 'MINOR ', 'REGRETTABLE '];
+		let r2 = ['AI ', 'ROBOTIC ', 'AUTOMATON ', 'EQUIPMENT ', 'TECHNOLOGICAL ', 'PROGRAMMING '];
+		let r3 = ['FAILURE', 'MISTAKE', 'MISHAP', 'COMPLICATION', 'ACCIDENT', 'BUG'];
+		do {
+			reasonText = 
+				r1[Math.floor(Math.random() * r1.length)] +
+				r2[Math.floor(Math.random() * r2.length)] +
+				r3[Math.floor(Math.random() * r3.length)];
+		} while (reasonText.length > 30);
+
+		if (game.score > game.data.highScore) {
+			game.data.highScore = game.score;
+			Cookies.set('blast_down_data',
+				JSON.stringify(game.data),
+				{expires: 365}
+			);
+			scoreText = 'NEW PERSONAL BEST!';
+		} else {
+			scoreText = 'YOUR BEST: ' + game.data.highScore;
+		}
+
+		topText.finalText = 'TEST TERMINATED\n\nREASON:\n' + reasonText + '\n\nSCORE: ' + game.score + '\n' + scoreText;
+		topText.fullText = topText.finalText + '\n\n\nRETURN';
+		topText.align = 'center';
 		topText.progress = 0;
 		topText.anchor.set(0.5, 0);
 
@@ -23,7 +47,7 @@ export default class ResultsState extends Phaser.State {
 		if (text.progress == text.fullText.length) {
 			game.sfx.beep.stop();
 			text.text = text.finalText;
-			game.add.existing(new ButtonText(158, 767, 'RETURN', this.return, this));
+			game.add.button(264, 1566, 'return', this.return, this, 1, 0, 1, 0);
 		}
 	}
 
