@@ -5,15 +5,15 @@ export default class Hoverer extends Phaser.Group {
 	constructor(x, y, inverted, moving) {
 		super(game);
 
-		if (x < 315) this.x = -100;
-		else         this.x = 730;
+		if (x < 315) this.x = -200;
+		else         this.x = 830;
 		this.y = y;
 
 		this.moving = moving;
 		if (this.moving) {
 			this.x += this.x - x;
 		} else {
-			game.add.tween(this).to({x: x}, 10*Math.abs(this.x-x)).start();
+			game.add.tween(this).to({x: x}, 5*Math.abs(this.x-x)).start();
 		}
 
 		this.triangle = new Triangle(this, false);
