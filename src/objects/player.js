@@ -28,11 +28,7 @@ export default class Player extends Phaser.Sprite {
 
 		game.physics.arcade.enable(this);
 
-		this.leftButton = game.input.keyboard.addKey(Phaser.KeyCode.LEFT);
-		this.rightButton = game.input.keyboard.addKey(Phaser.KeyCode.RIGHT);
-		var downButton = game.input.keyboard.addKey(Phaser.KeyCode.DOWN);
-		downButton.onDown.add(this.jetpackOn, this);
-		downButton.onUp.add(this.jetpackOff, this);
+		window.addEventListener("deviceorientation", this.onTilt.bind(this), true);
 	}
 
 	update() {
@@ -52,16 +48,6 @@ export default class Player extends Phaser.Sprite {
 			this.animations.play('up-down');
 		}
 
-		if (this.leftButton.isDown && !this.dead) {
-			if (this.scale.x > 0) this.scale.x = -1;
-			this.body.velocity.x += 0.2*(-600-this.body.velocity.x);
-		} else if (this.rightButton.isDown && !this.dead) {
-			if (this.scale.x < 0) this.scale.x = 1;
-			this.body.velocity.x += 0.2*(600-this.body.velocity.x);
-		} else {
-			this.body.velocity.x += 0.2*(0-this.body.velocity.x);
-		}
-
 		if (this.body.x < -10) {
 			this.body.x = -10;
 			this.body.velocity.x *= -1;
@@ -79,6 +65,18 @@ export default class Player extends Phaser.Sprite {
 
 		this.ly = this.body.y;
 		this.lvy = this.body.velocity.y;
+	}
+
+	onTilt(event) {
+		let newVel;
+		if (event.gamma < 0) {
+			newVel = Math.max(event.gamma*50, -700);
+			this.scale.x = -1;
+		} else {
+			newVel = Math.min(event.gamma*50, 700);
+			this.scale.x = 1;
+		}
+		this.body.velocity.x += 0.2*(newVel - this.body.velocity.x);
 	}
 
 	vincible() {

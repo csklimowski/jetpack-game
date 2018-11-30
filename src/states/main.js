@@ -37,6 +37,7 @@ export default class MainState extends Phaser.State {
 		
 		game.input.keyboard.addKey(Phaser.KeyCode.ESC).onDown.add(this.pauseGame, this);
 		game.input.onDown.add(this.onInputDown, this);
+		game.input.onUp.add(this.player.jetpackOff, this.player);
 		
 		this.level = 1;
 		this.awaitingNewWave = true;
@@ -88,26 +89,20 @@ export default class MainState extends Phaser.State {
 		game.sfx.floodlights.play();
 		this.background.frame = 1;
 		this.tutorialArrows = {
-			left: game.add.sprite(50, 960, 'arrows', 0),
-			down: game.add.sprite(240, 960, 'arrows', 1),
-			right: game.add.sprite(430, 960, 'arrows', 2)
+			down: game.add.sprite(240, 960, 'arrows', 1)
 		};
 
-		game.input.keyboard.addKey(Phaser.KeyCode.LEFT).onDown.addOnce(function() {
-			game.add.tween(this.tutorialArrows.left).to({alpha: 0}, 1000).start();
-		}, this);
-		game.input.keyboard.addKey(Phaser.KeyCode.DOWN).onDown.addOnce(function() {
-			game.add.tween(this.tutorialArrows.down).to({alpha: 0}, 1000).start();
+		game.input.onDown.addOnce(function() {
 			this.awaitingNewWave = false;
-		}, this);
-		game.input.keyboard.addKey(Phaser.KeyCode.RIGHT).onDown.addOnce(function() {
-			game.add.tween(this.tutorialArrows.right).to({alpha: 0}, 1000).start();
+			game.add.tween(this.tutorialArrows.down).to({alpha: 0}, 1000).start();
 		}, this);
 	}
 
 	onInputDown(event) {
 		if (event.x <= 60 && event.y <= 60) {
 			this.pauseGame();
+		} else {
+			this.player.jetpackOn();
 		}
 	}
 
