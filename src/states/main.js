@@ -88,13 +88,12 @@ export default class MainState extends Phaser.State {
 	lightsOn() {
 		game.sfx.floodlights.play();
 		this.background.frame = 1;
-		this.tutorialArrows = {
-			down: game.add.sprite(240, 960, 'arrows', 1)
-		};
+		this.tutorial = game.add.sprite(315, 1150, 'tilt');
+		this.tutorial.anchor.set(0.5);
 
 		game.input.onDown.addOnce(function() {
 			this.awaitingNewWave = false;
-			game.add.tween(this.tutorialArrows.down).to({alpha: 0}, 1000).start();
+			game.add.tween(this.tutorial).to({alpha: 0}, 1000).start();
 		}, this);
 	}
 
