@@ -74,8 +74,8 @@ export default class LoadState extends Phaser.State {
 			]
 		}
 
-		if (Cookies.get('blast_down_data')) {
-			let dataString = Cookies.get('blast_down_data');
+		if (localStorage.getItem('blast_down_data')) {
+			let dataString = localStorage.getItem('blast_down_data');
 			game.data = JSON.parse(dataString);
 		} else {
 			game.data = {

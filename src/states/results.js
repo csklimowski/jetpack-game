@@ -22,10 +22,7 @@ export default class ResultsState extends Phaser.State {
 
 		if (game.score > game.data.highScore) {
 			game.data.highScore = game.score;
-			Cookies.set('blast_down_data',
-				JSON.stringify(game.data),
-				{expires: 365}
-			);
+			localStorage.setItem('blast_down_data', JSON.stringify(game.data));
 			scoreText = 'NEW PERSONAL BEST!';
 		} else {
 			scoreText = 'YOUR BEST: ' + game.data.highScore;

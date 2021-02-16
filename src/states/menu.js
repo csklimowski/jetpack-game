@@ -80,9 +80,6 @@ export default class MenuState extends Phaser.State {
 			game.sound.mute = false;
 			game.sfx.gun.play();
 		}
-		Cookies.set('blast_down_data',
-			JSON.stringify(game.data),
-			{expires: 365}
-		);
+		localStorage.setItem('blast_down_data', JSON.stringify(game.data));
 	}
 }
