@@ -4,7 +4,9 @@ export default class LoadState extends Phaser.State {
 	preload() {
 		game.add.text(315, 300, 'Loading...', { font: '30px monospace', fill: '#00ff00', align: 'center'}).anchor.set(0.5);
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        game.scale.windowConstraints.bottom = 'layout';
+		game.scale.windowConstraints.bottom = 'layout';
+		game.scale.pageAlignHorizontally = true;
+        game.scale.pageAlignVertically = true;
 		
 		game.load.spritesheet('player', 'img/player.png', 64, 86);
 		game.load.spritesheet('background', 'img/bg.png', 630, 2000);
