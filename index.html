@@ -6,5 +6,18 @@
     <script type="text/javascript" src="js/jetpack.js"></script>
 </head>
 <body style="margin: 0">
-	<div id="game"></div>
-</body>~~
+    <div id="game"></div>
+    <button id="fullscreen">Full screen</button>
+</body>
+<style>
+    #fullscreen {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+    }
+</style>
+<script>
+    document.getElementById('fullscreen').addEventListener("click", function() {
+        document.getElementById("game").requestFullscreen();
+    });
+</script>
