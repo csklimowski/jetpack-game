@@ -49,4 +49,5 @@ function develop() {
 
 
 exports.bundle = bundle;
+exports.build = build;
 exports.default = gulp.series(bundle, serve, watch);
